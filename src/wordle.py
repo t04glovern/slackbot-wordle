@@ -46,7 +46,7 @@ class WordleGame:
                 if guess[i] not in letters_good:
                     letters_good.append(guess[i])
             else:
-                out_string += ":black_black_square: "
+                out_string += ":black_large_square: "
         out_string += "\n"
         self.history += out_string
         self.turns += 1
