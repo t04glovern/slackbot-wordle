@@ -16,6 +16,17 @@ sam build
 sam deploy
 ```
 
+## Local Testing
+
+### DynamoDB
+
+```bash
+# Start DynamoDB locally (must be run in devcontainer)
+java -Djava.library.path=/opt/dynamodb_local/DynamoDBLocal_lib -jar /opt/dynamodb_local/DynamoDBLocal.jar -sharedDb
+```
+
+In a new terminal tab, run your tests
+
 ## GitHub Actions
 
 Requires the [OIDC provider](.github/cfn/oidc-provider.yml) and [repository specific template](.github/cfn/oidc.yml) to be deployed into an AWS account allowing specific permissions needed.

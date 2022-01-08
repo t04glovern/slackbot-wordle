@@ -1,7 +1,7 @@
 import logging
 import random
 
-from utils import WORDLEBANK
+from utils import WORDLEBANK, get_wordle_game, put_wordle_game
 
 WORDS = WORDLEBANK
 WORDS_SET = set(WORDS)
@@ -77,108 +77,108 @@ class WordleGame:
 
 
 class WordleBot:
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.games = dict()
+    def __init__(self, user_id: str):
+        wordle_games = get_wordle_game(user_id)
+        if len(wordle_games) > 0:
+            self.games["user_id"] = wordle_games[0]
+        else:
+            self.games = dict()
 
-    def on_command_error(self, ctx, error):
-        logger.info(f"Error: {error}")
-
-    ## Custom functions
-    def checkGame(self, user_id: int):
+    def checkGame(self, user_id: str):
         return user_id in self.games
 
-    def deleteGame(self, user_id: int):
+    def deleteGame(self, user_id: str):
         if self.checkGame(user_id):
             del self.games[user_id]
             return 0
         return 1
 
-    def addGame(self, user_id: int, game: WordleGame):
+    def addGame(self, user_id: str, game: WordleGame):
         if self.checkGame(user_id):
             return False
         else:
             self.games[user_id] = game
 
-    def getGame(self, user_id: int):
+    def getGame(self, user_id: str):
         if self.checkGame(user_id):
             return self.games[user_id]
         else:
             return None
 
+class WordleBotManager:
+    def __init(self, ctx):
+        self.ctx = ctx
+        self.bot = WordleBot(ctx["user_id"])
 
-bot = WordleBot()
+    def start(self):
+        """Starts a new Wordle game if one hasn't begun already."""
+        uid = self.ctx["user_id"]
 
+        if self.bot.checkGame(uid):
+            logger.info(
+                "[RESPOND]: "
+                + "Game already started. End the game first before starting a new one."
+            )
+            return
 
-def start(ctx):
-    """Starts a new Wordle game if one hasn't begun already."""
-    uid = ctx["user_id"]
+        logger.info("[RESPOND]: " + "Starting standard game of Wordle...")
+        word = random.choice(WORDS)
 
-    if bot.checkGame(uid):
-        logger.info(
-            "[RESPOND]: "
-            + "Game already started. End the game first before starting a new one."
-        )
-        return
-
-    logger.info("[RESPOND]: " + "Starting standard game of Wordle...")
-    word = random.choice(WORDS)
-
-    user = ctx["user_id"]
-    bot.addGame(uid, WordleGame(user, word))
-
-
-def review(ctx):
-    """Review your previous guesses."""
-    logger.info("[RESPOND]: " + "Your guesses so far are:")
-    game = bot.getGame(ctx["user_id"])
-    logger.info("[SEND]: " + game.getHistory())
-    # CUSTOM RETURN
-    return game.getHistory()
+        user = self.ctx["user_id"]
+        self.bot.addGame(uid, WordleGame(user, word))
 
 
-def letters(ctx):
-    """Get which letters are still possible."""
-    game = bot.getGame(ctx["user_id"])
-    logger.info("[RESPOND]: " + "Your available letters are:")
-    for k, v in game.getLetters().items():
-        if k == "open":
-            logger.info("[SEND]: " + f":white_circle: Open letters: {' '.join(v)}")
-            # CUSTOM RETURN
-            return f":white_circle: Open letters: {' '.join(v)}"
-        else:
-            logger.info("[SEND]: " + f":green_circle: Found letters: {' '.join(v)}")
-            # CUSTOM RETURN
-            return f":green_circle: Found letters: {' '.join(v)}"
+    def review(self):
+        """Review your previous guesses."""
+        logger.info("[RESPOND]: " + "Your guesses so far are:")
+        game = self.bot.getGame(self.ctx["user_id"])
+        logger.info("[SEND]: " + game.getHistory())
+        # CUSTOM RETURN
+        return game.getHistory()
 
 
-def guess(ctx, guess):
-    """Make a guess in a wordle game."""
-    guess = guess.upper()
-    uid = ctx["user_id"]
-    print(f"Attempted guess by [{uid}] was {guess}")
-    if len(guess) != 5:
-        logger.info("[RESPOND]: " + "Guess invalid, needs to be 5 letters.")
-        return
-    if guess not in WORDS_SET:
-        logger.info("[RESPOND]: " + "Guess invalid, needs to be real 5 letter word.")
-        return
-    logger.info("[RESPOND]: " + f"Your guess was: {guess}")
-    game = bot.getGame(uid)
-    guess_result, response = game.process_guess(guess)
-    logger.info("[SEND]: " + game.getHistory())
-    logger.info("[SEND]: " + response)
-    if guess_result == -1 or guess_result == 1:
-        # Game over
-        bot.deleteGame(uid)
-    # CUSTOM RETURN
-    return game.getHistory() + "\n" + response
+    def letters(self):
+        """Get which letters are still possible."""
+        game = self.bot.getGame(self.ctx["user_id"])
+        logger.info("[RESPOND]: " + "Your available letters are:")
+        for k, v in game.getLetters().items():
+            if k == "open":
+                logger.info("[SEND]: " + f":white_circle: Open letters: {' '.join(v)}")
+                # CUSTOM RETURN
+                return f":white_circle: Open letters: {' '.join(v)}"
+            else:
+                logger.info("[SEND]: " + f":green_circle: Found letters: {' '.join(v)}")
+                # CUSTOM RETURN
+                return f":green_circle: Found letters: {' '.join(v)}"
 
 
-def end(ctx):
-    """Ends game in current guild."""
-    uid = ctx["user_id"]
-    game = bot.getGame(uid)
-    word = game.endGame()
-    logger.info("[RESPOND]: " + f"Game over! The word was {word}")
-    bot.deleteGame(uid)
+    def guess(self, guess):
+        """Make a guess in a wordle game."""
+        guess = guess.upper()
+        uid = self.ctx["user_id"]
+        print(f"Attempted guess by [{uid}] was {guess}")
+        if len(guess) != 5:
+            logger.info("[RESPOND]: " + "Guess invalid, needs to be 5 letters.")
+            return
+        if guess not in WORDS_SET:
+            logger.info("[RESPOND]: " + "Guess invalid, needs to be real 5 letter word.")
+            return
+        logger.info("[RESPOND]: " + f"Your guess was: {guess}")
+        game = self.bot.getGame(uid)
+        guess_result, response = game.process_guess(guess)
+        logger.info("[SEND]: " + game.getHistory())
+        logger.info("[SEND]: " + response)
+        if guess_result == -1 or guess_result == 1:
+            # Game over
+            self.bot.deleteGame(uid)
+        # CUSTOM RETURN
+        return game.getHistory() + "\n" + response
+
+
+    def end(self):
+        """Ends game in current guild."""
+        uid = self.ctx["user_id"]
+        game = self.bot.getGame(uid)
+        word = game.endGame()
+        logger.info("[RESPOND]: " + f"Game over! The word was {word}")
+        self.bot.deleteGame(uid)

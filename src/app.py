@@ -3,7 +3,7 @@ import time
 from slack_bolt import App
 from slack_bolt.adapter.aws_lambda import SlackRequestHandler
 
-from wordle import guess, letters, start
+from wordle import WordleBotManager
 
 # process_before_response must be True when running on FaaS
 app = App(process_before_response=True)
@@ -21,12 +21,13 @@ def run_long_process(respond, body):
     time.sleep(5)  # longer than 3 seconds
 
     ## TODO Wordle Logic
-    start(ctx=body)
-    respond(letters(ctx=body))
-    respond(guess(ctx=body, guess="AROSE"))
-    respond(letters(ctx=body))
-    respond(guess(ctx=body, guess="TAKEN"))
-    respond(letters(ctx=body))
+    bot = WordleBotManager(ctx=body)
+    bot.start()
+    respond(bot.letters())
+    respond(bot.guess(guess="AROSE"))
+    respond(bot.letters())
+    respond(bot.guess(guess="TAKEN"))
+    respond(bot.letters())
 
 
 def handler(event, context):

@@ -37,5 +37,10 @@ RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zi
         && ./aws/install \
         && rm awscliv2.zip
 
+# DynamoDB Local
+RUN curl https://s3.ap-southeast-1.amazonaws.com/dynamodb-local-singapore/dynamodb_local_latest.zip -o dynamodb_local_latest.zip \
+        && unzip dynamodb_local_latest.zip -d /opt/dynamodb_local \
+        && rm dynamodb_local_latest.zip
+
 # Swap to user space
 USER $USERNAME
