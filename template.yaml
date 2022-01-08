@@ -74,6 +74,7 @@ Resources:
               - dynamodb:BatchGetItem
               - dynamodb:BatchWriteItem
               - dynamodb:DeleteItem
+              - dynamodb:DescribeTable
               - dynamodb:GetItem
               - dynamodb:PutItem
               - dynamodb:Query
