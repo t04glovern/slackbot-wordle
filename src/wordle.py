@@ -7,7 +7,7 @@ WORDS = WORDLEBANK
 WORDS_SET = set(WORDS)
 
 logging.basicConfig(
-    format="%(levelname)s - %(funcName)s() - %(message)s", level=logging.INFO
+    format="%(levelname)s - %(funcName)s() - %(message)s", level=logging.DEBUG
 )
 logger = logging.getLogger(__name__)
 
