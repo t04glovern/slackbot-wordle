@@ -106,7 +106,7 @@ class WordleBot:
             return None
 
 class WordleBotManager:
-    def __init(self, ctx):
+    def __init__(self, ctx):
         self.ctx = ctx
         self.bot = WordleBot(ctx["user_id"])
 
