@@ -21,7 +21,6 @@ def run_long_process(respond, body):
     time.sleep(5)  # longer than 3 seconds
 
     ## TODO Wordle Logic
-    bot = WordleBot()
     ctx = dict()
     ctx["user_id"] = "nathan"
     start(ctx)

@@ -104,6 +104,7 @@ class WordleBot:
         else:
             return None
 
+bot = WordleBot()
 
 def start(ctx):
     """Starts a new Wordle game if one hasn't begun already."""
