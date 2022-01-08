@@ -65,13 +65,12 @@ Resources:
             RestApiId: !Ref SlackbotApi
       Policies:
         - Statement:
-          - Sid: LambdaReinvokeAccess
-            Effect: Allow
+          - Effect: Allow
             Action:
               - lambda:InvokeFunction
+              - lambda:GetFunction
             Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${FunctionName}-${StageName}
-          - Sid: DynamoDBAccess
-            Effect: Allow
+          - Effect: Allow
             Action:
               - dynamodb:BatchGetItem
               - dynamodb:BatchWriteItem
