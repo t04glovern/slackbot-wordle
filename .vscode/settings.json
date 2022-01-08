@@ -60,7 +60,8 @@
   "python.analysis.extraPaths": [
     "/usr/local/lib/python3.9/site-packages",
     "/usr/local/lib/python3.9/dist-packages",
-    "/home/dev/.local/lib/python3.9/site-packages"
+    "/home/dev/.local/lib/python3.9/site-packages",
+    "/workspace/src"
   ],
   // Dockerfile
   "[dockerfile]": {
