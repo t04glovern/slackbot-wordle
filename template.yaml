@@ -52,6 +52,7 @@ Resources:
       FunctionName: !Sub ${FunctionName}-${StageName}
       Environment:
         Variables:
+          DYNAMODB_GAME_TABLE: !Ref WordleGameStore
           SLACK_SIGNING_SECRET: '{{resolve:secretsmanager:slackbot-wordle:SecretString:signing}}'
           SLACK_BOT_TOKEN: '{{resolve:secretsmanager:slackbot-wordle:SecretString:token}}'
       Events:
@@ -74,7 +75,6 @@ Resources:
               - dynamodb:BatchGetItem
               - dynamodb:BatchWriteItem
               - dynamodb:DeleteItem
-              - dynamodb:DescribeTable
               - dynamodb:GetItem
               - dynamodb:PutItem
               - dynamodb:Query
