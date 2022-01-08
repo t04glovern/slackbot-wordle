@@ -6,7 +6,9 @@ from utils import WORDLEBANK
 WORDS = WORDLEBANK
 WORDS_SET = set(WORDS)
 
-logging.basicConfig(format='%(levelname)s - %(funcName)s() - %(message)s', level=logging.INFO)
+logging.basicConfig(
+    format="%(levelname)s - %(funcName)s() - %(message)s", level=logging.INFO
+)
 logger = logging.getLogger(__name__)
 
 
@@ -104,7 +106,9 @@ class WordleBot:
         else:
             return None
 
+
 bot = WordleBot()
+
 
 def start(ctx):
     """Starts a new Wordle game if one hasn't begun already."""

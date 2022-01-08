@@ -3,7 +3,7 @@ import time
 from slack_bolt import App
 from slack_bolt.adapter.aws_lambda import SlackRequestHandler
 
-from wordle import WordleBot, guess, letters, start
+from wordle import guess, letters, start
 
 # process_before_response must be True when running on FaaS
 app = App(process_before_response=True)
@@ -14,23 +14,19 @@ def respond_to_slack_within_3_seconds(body, ack):
     if text is None or len(text) == 0:
         ack("Usage: /wordle (description here)")
     else:
-        ack(f"Accepted! (task: {body['text']})")
+        ack(f"Welcome {body['user_name']} to Wordle, let's start a new game!")
 
 
 def run_long_process(respond, body):
     time.sleep(5)  # longer than 3 seconds
 
     ## TODO Wordle Logic
-    ctx = dict()
-    ctx["user_id"] = "nathan"
-    start(ctx)
-    respond(letters(ctx))
-    respond(guess(ctx, "AROSE"))
-    respond(letters(ctx))
-    respond(guess(ctx, "TAKEN"))
-    respond(letters(ctx))
-
-    # respond(f"Completed! (task: {body['text']})")
+    start(ctx=body)
+    respond(letters(ctx=body))
+    respond(guess(ctx=body, guess="AROSE"))
+    respond(letters(ctx=body))
+    respond(guess(ctx=body, guess="TAKEN"))
+    respond(letters(ctx=body))
 
 
 def handler(event, context):
