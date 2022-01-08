@@ -7,7 +7,7 @@ WORDS = WORDLEBANK
 WORDS_SET = set(WORDS)
 
 logging.basicConfig(
-    format="%(levelname)s - %(funcName)s() - %(message)s", level=logging.DEBUG
+    format="%(levelname)s - %(funcName)s() - %(message)s", level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
@@ -99,6 +99,13 @@ class WordleBot:
         else:
             self.games[user_id] = game
 
+    def saveGame(self, user_id: str):
+        game = self.getGame(user_id)
+        if game:
+            put_wordle_game(user_id=user_id, game=game)
+            return 1
+        return 0
+
     def getGame(self, user_id: str):
         if self.checkGame(user_id):
             return self.games[user_id]
@@ -171,6 +178,9 @@ class WordleBotManager:
         if guess_result == -1 or guess_result == 1:
             # Game over
             self.bot.deleteGame(uid)
+        else:
+            # Save game
+            self.bot.saveGame(uid)
         # CUSTOM RETURN
         return game.getHistory() + "\n" + response
 
