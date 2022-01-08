@@ -6,11 +6,14 @@ Parameters:
   StageName:
     Type: String
     Default: prod
+  FunctionName:
+    Type: String
+    Default: slackbot-wordle
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 30
+    Timeout: 10
 
 Resources:
   SlackbotApi:
@@ -19,10 +22,26 @@ Resources:
       StageName: !Ref StageName
       AccessLogSetting:
         DestinationArn: !GetAtt SlackbotLogGroup.Arn
-        Format: '{"requestTime":"$context.requestTime","requestId":"$context.requestId","httpMethod":"$context.httpMethod","path":"$context.path","resourcePath":"$context.resourcePath","status":$context.status,"responseLatency":$context.responseLatency,"xrayTraceId":"$context.xrayTraceId","integrationRequestId":"$context.integration.requestId","functionResponseStatus":"$context.integration.status","integrationLatency":"$context.integration.latency","integrationServiceStatus":"$context.integration.integrationStatus","ip":"$context.identity.sourceIp","userAgent":"$context.identity.userAgent"}'
+        Format: >-
+          '{"requestTime":"$context.requestTime",
+          "requestId":"$context.requestId",
+          "httpMethod":"$context.httpMethod",
+          "path":"$context.path",
+          "resourcePath":"$context.resourcePath",
+          "status":$context.status,
+          "responseLatency":$context.responseLatency,
+          "xrayTraceId":"$context.xrayTraceId",
+          "integrationRequestId":"$context.integration.requestId",
+          "functionResponseStatus":"$context.integration.status",
+          "integrationLatency":"$context.integration.latency",
+          "integrationServiceStatus":"$context.integration.integrationStatus",
+          "ip":"$context.identity.sourceIp",
+          "userAgent":"$context.identity.userAgent"}'
 
   SlackbotLogGroup:
     Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/apigateway/${FunctionName}
 
   SlackEventFunction:
     Type: AWS::Serverless::Function
@@ -30,7 +49,7 @@ Resources:
       CodeUri: src/
       Handler: app.handler
       Runtime: python3.9
-      FunctionName: slackbot-wordle
+      FunctionName: !Ref FunctionName
       Environment:
         Variables:
           SLACK_SIGNING_SECRET: '{{resolve:secretsmanager:slackbot-wordle:SecretString:signing}}'
@@ -44,11 +63,10 @@ Resources:
             RestApiId: !Ref SlackbotApi
       Policies:
         - Statement:
-          - Sid: ApplicationSecretStoreAccess
-            Effect: Allow
+          - Effect: Allow
             Action:
               - lambda:InvokeFunction
-            Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:slackbot-wordle
+            Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${FunctionName}
 
 Outputs:
   # ServerlessHttpApi is an implicit API created out of Events key under Serverless::Function
