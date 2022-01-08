@@ -30,6 +30,10 @@ Resources:
       CodeUri: src/
       Handler: app.handler
       Runtime: python3.9
+      Environment:
+        Variables:
+          SLACK_SIGNING_SECRET: '{{resolve:secretsmanager:slackbot-wordle:SecretString:signing}}'
+          SLACK_BOT_TOKEN: '{{resolve:secretsmanager:slackbot-wordle:SecretString:token}}'
       Events:
         SlackEvent:
           Type: Api

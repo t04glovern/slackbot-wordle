@@ -10,7 +10,7 @@ app = App(process_before_response=True)
 def respond_to_slack_within_3_seconds(body, ack):
     text = body.get("text")
     if text is None or len(text) == 0:
-        ack("Usage: /start-process (description here)")
+        ack("Usage: /wordle (description here)")
     else:
         ack(f"Accepted! (task: {body['text']})")
 
@@ -25,7 +25,7 @@ def handler(event, context):
     return slack_handler.handle(event, context)
 
 
-app.command("/start-process")(
+app.command("/wordle")(
     ack=respond_to_slack_within_3_seconds,  # responsible for calling `ack()`
     lazy=[run_long_process],  # unable to call `ack()` / can have multiple functions
 )
