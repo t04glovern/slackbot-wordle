@@ -30,4 +30,5 @@ OIDC_ROLE_AWS_ROLE_TO_ASSUME
 ## Attribution
 
 * [Building and deploying a Slack app with Python, Bolt, and AWS Amplify](https://www.xiegerts.com/post/slack-app-bolt-python-amplify/)
-* [Python Bolt - Concepts](https://slack.dev/bolt-python/concepts)
+* [slack_bolt.app.app](https://slack.dev/bolt-python/api-docs/slack_bolt/app/app.html#slack_bolt.app.app.App)
+* [Slack slash command responses](https://api.slack.com/interactivity/slash-commands#app_command_handling)
