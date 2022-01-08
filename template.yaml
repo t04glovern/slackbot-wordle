@@ -69,7 +69,7 @@ Resources:
             Effect: Allow
             Action:
               - lambda:InvokeFunction
-            Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${FunctionName}
+            Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${FunctionName}-${StageName}
           - Sid: DynamoDBAccess
             Effect: Allow
             Action:
