@@ -38,7 +38,7 @@ Resources:
         SlackEvent:
           Type: Api
           Properties:
-            Path: /slack/events
+            Path: /
             Method: post
             RestApiId: !Ref SlackbotApi
 
