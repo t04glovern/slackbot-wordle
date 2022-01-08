@@ -29,7 +29,7 @@ Resources:
                 Action:
                   - logs:CreateLogGroup
                 Resource:
-                  - !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/apigateway/slackbot-wordle
+                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/apigateway/slackbot-wordle*'
         - PolicyName: get-secret-values
           PolicyDocument:
             Version: '2012-10-17'
