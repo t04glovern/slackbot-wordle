@@ -30,6 +30,7 @@ Resources:
       CodeUri: src/
       Handler: app.handler
       Runtime: python3.9
+      FunctionName: slackbot-wordle
       Environment:
         Variables:
           SLACK_SIGNING_SECRET: '{{resolve:secretsmanager:slackbot-wordle:SecretString:signing}}'
@@ -41,14 +42,13 @@ Resources:
             Path: /
             Method: post
             RestApiId: !Ref SlackbotApi
-
-  SlackbotApiInvoke:
-    Type: AWS::Lambda::Permission
-    Properties:
-      Action: lambda:InvokeFunction
-      FunctionName: !Ref SlackEventFunction
-      Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${SlackbotApi}/*/*
+      Policies:
+        - Statement:
+          - Sid: ApplicationSecretStoreAccess
+            Effect: Allow
+            Action:
+              - lambda:InvokeFunction
+            Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:slackbot-wordle
 
 Outputs:
   # ServerlessHttpApi is an implicit API created out of Events key under Serverless::Function
