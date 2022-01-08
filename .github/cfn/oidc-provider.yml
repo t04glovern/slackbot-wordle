@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: 'GitHub OIDC: Provider - Deployed once into each account | Stack: oidc-provider-t04glovern'
+
+Parameters:
+  GithubOrg:
+    Type: String
+    Default: t04glovern
+
+Resources:
+  GithubOidc:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ThumbprintList: [a031c46782e6e6c662c2c87c76da9aa62ccabd8e]
+      ClientIdList:
+        - !Sub https://github.com/${GithubOrg}

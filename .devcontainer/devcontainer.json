@@ -1,0 +1,30 @@
+{
+  "name": "${localWorkspaceFolderBasename}",
+  "build": {
+    "dockerfile": "./Dockerfile",
+    "context": "..",
+    "target": "dev"
+  },
+  "shutdownAction": "stopContainer",
+  "postStartCommand": "pip3 install -r /workspace/src/requirements.txt",
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+  "remoteEnv": {
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+  },
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind,consistency=delegated",
+  ],
+  "extensions": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "njpwerner.autodocstring",
+    "ms-azuretools.vscode-docker",
+    "redhat.vscode-yaml",
+    "kddejong.vscode-cfn-lint"
+  ],
+  "settings": {
+    "python.pythonPath": "/usr/local/bin/python"
+  },
+  "remoteUser": "dev"
+}

@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: 'GitHub OIDC: t04glovern/slackbot-wordle | Stack: oidc-t04glovern-slackbot-wordle'
+
+Parameters:
+  FullRepoName:
+    Type: String
+    Default: t04glovern/slackbot-wordle
+
+Resources:
+  Role:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: oidc-t04glovern-slackbot-wordle
+      Policies:
+        - PolicyName: deploy-cloudformation-stacks
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogDelivery
+                  - logs:DeleteLogDelivery
+                  - logs:GetLogDelivery
+                  - logs:ListLogDeliveries
+                  - logs:UpdateLogDelivery
+                Resource:
+                  - '*'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
+        - arn:aws:iam::aws:policy/IAMFullAccess
+        - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+        - arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRoleWithWebIdentity
+            Principal:
+              Federated: !Sub arn:aws:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com
+            Condition:
+              StringLike:
+                token.actions.githubusercontent.com:sub: !Sub repo:${FullRepoName}:*
+
+Outputs:
+  OidcRoleAwsAccountId:
+    Value: !Ref AWS::AccountId
+  OidcRoleAwsRegion:
+    Value: !Ref AWS::Region
+  OidcRoleAwsRoleToAssume:
+    Value: !GetAtt Role.Arn
