@@ -20,18 +20,18 @@ def respond_to_slack_within_3_seconds(body, ack):
 def run_long_process(respond, body):
     time.sleep(5)  # longer than 3 seconds
 
-    ## TODO Wordl Logic
+    ## TODO Wordle Logic
     bot = WordleBot()
     ctx = dict()
     ctx["user_id"] = "nathan"
     start(ctx)
-    letters(ctx)
-    guess(ctx, "AROSE")
-    letters(ctx)
-    guess(ctx, "TAKEN")
-    letters(ctx)
+    respond(letters(ctx))
+    respond(guess(ctx, "AROSE"))
+    respond(letters(ctx))
+    respond(guess(ctx, "TAKEN"))
+    respond(letters(ctx))
 
-    respond(f"Completed! (task: {body['text']})")
+    # respond(f"Completed! (task: {body['text']})")
 
 
 def handler(event, context):
