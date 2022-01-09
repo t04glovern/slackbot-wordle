@@ -14,11 +14,15 @@ app = App(process_before_response=True)
 
 
 def respond_to_slack_within_3_seconds(body, ack):
-    text = body.get("text")
-    if text is None or len(text) == 0:
+    """[options]
+        ['start']
+        ['guess', '<WORD>']
+    """
+    options = body.get("text")
+    if options is None or len(options) == 0:
         ack("Usage: /wordle start | /wordle guess <WORD>")
     else:
-        if text is "start":
+        if options[0] is "start":
             ack(f"Welcome {body['user_name']} to Wordle!")
             bot = WordleBotManager(ctx=body)
             bot.start()
@@ -31,7 +35,7 @@ def handle_game(respond, body):
     """
     text = body.get("text")
     options = text.split()
-    logger.info("handle_game requestion options: {}".format(options))
+    logger.info("handle_game request options: {}".format(options))
 
     if options[0] is "guess": # Check if we have a 'guess'
         if options[1]: # Check a word was provided
