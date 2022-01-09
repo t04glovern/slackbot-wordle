@@ -18,7 +18,8 @@ def respond_to_slack_within_3_seconds(body, ack):
         ['start']
         ['guess', '<WORD>']
     """
-    options = body.get("text")
+    text = body.get("text")
+    options = text.split()
     logger.info("respond_to_slack_within_3_seconds request options: {}".format(options))
     if options is None or len(options) == 0:
         ack("Usage: /wordle start | /wordle guess <WORD>")
@@ -27,8 +28,12 @@ def respond_to_slack_within_3_seconds(body, ack):
             bot = WordleBotManager(ctx=body)
             bot.start()
             ack(f"Welcome {body['user_name']} to Wordle!")
-        else:
-            ack("Usage: /wordle start | /wordle guess <WORD>")
+        elif options[0] is "guess": # Check if we have a 'guess'
+            if options[1]: # Check a word was provided
+                guess = options[1]
+                bot = WordleBotManager(ctx=body)
+                bot.start()
+                ack(bot.guess(guess=guess))
 
 
 def handle_game(respond, body):
@@ -57,5 +62,5 @@ def handler(event, context: LambdaContext):
 
 app.command("/wordle")(
     ack=respond_to_slack_within_3_seconds,  # responsible for calling `ack()`
-    lazy=[handle_game],  # unable to call `ack()` / can have multiple functions
+    # lazy=[handle_game],  # unable to call `ack()` / can have multiple functions
 )
