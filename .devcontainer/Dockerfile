@@ -13,7 +13,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
         && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
         && chmod 0440 /etc/sudoers.d/$USERNAME
 
-RUN apt-get -qq update && apt-get install -qq -y git curl bash zip
+RUN apt-get -qq update && apt-get install -qq -y git curl wget bash zip make
 
 ENV DOCKER_VERSION=20.10.9
 RUN curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz \
@@ -45,6 +45,7 @@ RUN curl https://s3.ap-southeast-1.amazonaws.com/dynamodb-local-singapore/dynamo
 # Dev Requirements (https://pypi.org/project/htmlwebshot/)
 RUN apt-get update \
         && apt-get install -y wkhtmltopdf
+RUN pip3 install htmlwebshot
 
 # Swap to user space
 USER $USERNAME

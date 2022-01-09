@@ -81,15 +81,29 @@ Resources:
               - dynamodb:Query
             Resource: !GetAtt WordleGameStore.Arn
 
+  ImageGenerateLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: !Sub ${FunctionName}-wkhtmltox
+      Description: wkhtmltopdf Lambda Layer
+      ContentUri: layer
+      CompatibleRuntimes:
+        - python3.9
+    Metadata:
+      BuildMethod: makefile
+
   ImageGenerateFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: src/
       Handler: image.generate
-      Runtime: python3.7
+      Runtime: python3.9
       FunctionName: !Sub ${FunctionName}-image-${StageName}
       Layers:
-        - arn:aws:lambda:us-east-1:347599033421:layer:wkhtmltopdf-0_12_6:1
+        - !Ref ImageGenerateLayer
+      Environment:
+        Variables:
+          FONTCONFIG_PATH: /opt/fonts
       Events:
         SlackEvent:
           Type: Api

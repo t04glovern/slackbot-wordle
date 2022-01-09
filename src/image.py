@@ -1,6 +1,6 @@
 from string import Template
 
-from htmlwebshot import WebShot
+from htmlwebshot import Config, WebShot
 
 
 def generate(event, context):
@@ -96,15 +96,15 @@ def generate(event, context):
     </html>
     """
     )
-    filepath = "/tmp/wordle.svg"
+    filepath = "wordle.svg"
     shot.create_pic(html=content.template, output=filepath)
     with open(filepath, "r") as file:
         image = file.read().replace("\n", "")
-
-        return {
-            "statusCode": 200,
-            "body": image,
-            "headers": {
-                "Content-Type": "image/svg+xml",
-            },
-        }
+    print(image)
+    return {
+        "statusCode": 200,
+        "body": image,
+        "headers": {
+            "Content-Type": "image/svg+xml",
+        },
+    }
