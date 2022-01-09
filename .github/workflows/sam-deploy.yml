@@ -37,7 +37,7 @@ jobs:
 
     - name: Build SAM project
       run: |
-        sam build
+        sam build --use-container
 
     - name: Run AWS SAM deploy
       run: |
