@@ -1,5 +1,7 @@
 # Slackbot Wordle
 
+![Slackbot Example](img/sample.png)
+
 ## Manual Deployment
 
 ```bash
