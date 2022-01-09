@@ -24,11 +24,11 @@ def respond_to_slack_within_3_seconds(body, ack):
     if options is None or len(options) == 0:
         ack("Usage: /wordle start | /wordle guess <WORD>")
     else:
-        if options[0] is "start":
+        if options[0] == "start":
             bot = WordleBotManager(ctx=body)
             bot.start()
             ack(f"Welcome {body['user_name']} to Wordle!")
-        elif options[0] is "guess": # Check if we have a 'guess'
+        elif options[0] == "guess": # Check if we have a 'guess'
             if options[1]: # Check a word was provided
                 guess = options[1]
                 bot = WordleBotManager(ctx=body)
@@ -45,7 +45,7 @@ def handle_game(respond, body):
     options = text.split()
     logger.info("handle_game request options: {}".format(options))
 
-    # if options[0] is "guess": # Check if we have a 'guess'
+    # if options[0] == "guess": # Check if we have a 'guess'
     #     if options[1]: # Check a word was provided
     #         guess = options[1]
     #         bot = WordleBotManager(ctx=body)
