@@ -41,6 +41,8 @@ def respond_to_slack_within_3_seconds(body, ack):
             bot = WordleBotManager(ctx=body)
             bot.end()
             ack(f"Game reset for {body['user_name']}!, use `/wordle start` to play again")
+        else:
+            ack("No valid option selected... Usage: `/wordle start` | `/wordle guess <WORD>` | `/wordle end`")
 
 def handle_game(respond, body):
     """[options]
