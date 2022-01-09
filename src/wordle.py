@@ -100,6 +100,7 @@ class WordleBot:
         item = get_wordle_game(user_id)
         game_item = item["game"]
         if game_item:
+            logger.debug("WordleBot.__init__ game_item found for {} with value: {}".format(user_id, game_item))
             game = WordleGame(
                 game_started=game_item["game_started"],
                 user=game_item["user"],
@@ -110,6 +111,8 @@ class WordleBot:
                 letters_good=game_item["letters"]["good"]
             )
             self.games["user_id"] = game
+        else:
+            logger.debug("WordleBot.__init__ game_item NOT found for {}".format(user_id))
 
     def checkGame(self, user_id: str):
         logger.debug("checkGame for {}".format(user_id))
