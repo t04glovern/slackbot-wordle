@@ -49,6 +49,12 @@ OIDC_ROLE_AWS_REGION
 OIDC_ROLE_AWS_ROLE_TO_ASSUME
 ```
 
+## TODO
+
+* Convert flow to use [Surface modals if possible](https://api.slack.com/surfaces/modals/using) - will need to confirm this is possible with Slack Bolt
+* Instead of returning Emojis/Unicode images, return a dynamically generated image (png/svg) that will be displayed in the modal.
+  * i.e **URL**: `/gameboard/<some-kind-of-gameboard-encoding-in-url>/ -> image_data`
+
 ## Attribution
 
 * [Building and deploying a Slack app with Python, Bolt, and AWS Amplify](https://www.xiegerts.com/post/slack-app-bolt-python-amplify/)
