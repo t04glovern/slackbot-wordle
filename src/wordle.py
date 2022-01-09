@@ -7,7 +7,7 @@ WORDS = WORDLEBANK
 WORDS_SET = set(WORDS)
 
 logging.basicConfig(
-    format="%(levelname)s - %(funcName)s() - %(message)s", level=logging.DEBUG
+    format="%(levelname)s - %(funcName)s() - %(message)s", level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
@@ -100,7 +100,7 @@ class WordleBot:
         item = get_wordle_game(user_id)
         game_item = item["game"]
         if game_item:
-            logger.debug("WordleBot.__init__ game_item found for {} with value: {}".format(user_id, game_item))
+            logger.info("WordleBot.__init__ game_item found for {} with value: {}".format(user_id, game_item))
             game = WordleGame(
                 game_started=game_item["game_started"],
                 user=game_item["user"],
@@ -112,30 +112,30 @@ class WordleBot:
             )
             self.games["user_id"] = game
         else:
-            logger.debug("WordleBot.__init__ game_item NOT found for {}".format(user_id))
+            logger.info("WordleBot.__init__ game_item NOT found for {}".format(user_id))
 
     def checkGame(self, user_id: str):
-        logger.debug("checkGame for {}".format(user_id))
+        logger.info("checkGame for {}".format(user_id))
         return user_id in self.games
 
     def deleteGame(self, user_id: str):
-        logger.debug("deleteGame for {}".format(user_id))
+        logger.info("deleteGame for {}".format(user_id))
         if self.checkGame(user_id):
             del self.games[user_id]
             return 0
         return 1
 
     def addGame(self, user_id: str, game: WordleGame):
-        logger.debug("addGame for {}".format(user_id))
+        logger.info("addGame for {}".format(user_id))
         if self.checkGame(user_id):
-            logger.debug("addGame game already exists for {}".format(user_id))
+            logger.info("addGame game already exists for {}".format(user_id))
             return False
         else:
-            logger.debug("addGame game didn't exists for {}. Adding one".format(user_id))
+            logger.info("addGame game didn't exists for {}. Adding one".format(user_id))
             self.games[user_id] = game
 
     def saveGame(self, user_id: str):
-        logger.debug("saveGame for {}".format(user_id))
+        logger.info("saveGame for {}".format(user_id))
         game = self.getGame(user_id)
         if game:
             put_wordle_game(user_id=user_id, game=game)
@@ -143,11 +143,11 @@ class WordleBot:
         return 0
 
     def getGame(self, user_id: str):
-        logger.debug("getGame for {}".format(user_id))
+        logger.info("getGame for {}".format(user_id))
         if self.checkGame(user_id):
             return self.games[user_id]
         else:
-            logger.debug("getGame: None found")
+            logger.info("getGame: None found")
             return None
 
 
