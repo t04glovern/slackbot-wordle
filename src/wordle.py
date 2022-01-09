@@ -110,7 +110,7 @@ class WordleBot:
                 letters_open=game_item["letters"]["open"],
                 letters_good=game_item["letters"]["good"]
             )
-            self.games["user_id"] = game
+            self.games[user_id] = game
         else:
             logger.info("WordleBot.__init__ game_item NOT found for {}".format(user_id))
 
