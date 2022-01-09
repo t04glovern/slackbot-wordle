@@ -13,17 +13,25 @@ logger = logging.getLogger(__name__)
 
 
 class WordleGame:
-    def __init__(self, user, word):
-        self.game_started = True
+    def __init__(
+        self,
+        game_started=True,
+        user=None,
+        word=None,
+        turns=0,
+        history="",
+        letters_open=list(map(chr, range(ord("A"), ord("Z") + 1))),
+        letters_good=[],
+    ):
+        self.game_started = game_started
         self.user = user
         self.word = word
-        self.turns = 0
-        self.history = ""
+        self.turns = turns
+        self.history = history
         self.letters = {
-            "open": list(map(chr, range(ord("A"), ord("Z") + 1))),
-            "good": [],
+            "open": letters_open,
+            "good": letters_good,
         }
-        print(f"Game started by {user} with word {word}.")
 
     def to_json(self):
         return {
@@ -32,10 +40,7 @@ class WordleGame:
             "word": self.word,
             "turns": self.turns,
             "history": self.history,
-            "letters": {
-                "open": self.letters["open"],
-                "good": self.letters["good"]
-            }
+            "letters": {"open": self.letters["open"], "good": self.letters["good"]},
         }
 
     def process_guess(self, guess):
@@ -125,6 +130,7 @@ class WordleBot:
         else:
             return None
 
+
 class WordleBotManager:
     def __init__(self, ctx):
         self.ctx = ctx
@@ -147,7 +153,6 @@ class WordleBotManager:
         user = self.ctx["user_id"]
         self.bot.addGame(uid, WordleGame(user, word))
 
-
     def review(self):
         """Review your previous guesses."""
         logger.info("[RESPOND]: " + "Your guesses so far are:")
@@ -155,7 +160,6 @@ class WordleBotManager:
         logger.info("[SEND]: " + game.getHistory())
         # CUSTOM RETURN
         return game.getHistory()
-
 
     def letters(self):
         """Get which letters are still possible."""
@@ -171,7 +175,6 @@ class WordleBotManager:
                 # CUSTOM RETURN
                 return f":green_circle: Found letters: {' '.join(v)}"
 
-
     def guess(self, guess):
         """Make a guess in a wordle game."""
         guess = guess.upper()
@@ -181,7 +184,9 @@ class WordleBotManager:
             logger.info("[RESPOND]: " + "Guess invalid, needs to be 5 letters.")
             return
         if guess not in WORDS_SET:
-            logger.info("[RESPOND]: " + "Guess invalid, needs to be real 5 letter word.")
+            logger.info(
+                "[RESPOND]: " + "Guess invalid, needs to be real 5 letter word."
+            )
             return
         logger.info("[RESPOND]: " + f"Your guess was: {guess}")
         game = self.bot.getGame(uid)
@@ -196,7 +201,6 @@ class WordleBotManager:
             self.bot.saveGame(uid)
         # CUSTOM RETURN
         return game.getHistory() + "\n" + response
-
 
     def end(self):
         """Ends game in current guild."""

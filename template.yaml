@@ -54,6 +54,7 @@ Resources:
         Variables:
           DYNAMODB_ENDPOINT_URL: !Sub https://dynamodb.${AWS::Region}.amazonaws.com
           DYNAMODB_GAME_TABLE: !Ref WordleGameStore
+          LOG_LEVEL: INFO
           SLACK_SIGNING_SECRET: '{{resolve:secretsmanager:slackbot-wordle:SecretString:signing}}'
           SLACK_BOT_TOKEN: '{{resolve:secretsmanager:slackbot-wordle:SecretString:token}}'
       Events:

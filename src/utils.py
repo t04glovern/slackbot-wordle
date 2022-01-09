@@ -2,13 +2,13 @@ import logging
 import os
 
 import boto3
+from aws_lambda_powertools import Logger
 from boto3.dynamodb.conditions import Key
 from botocore.exceptions import ClientError
 
-logging.basicConfig(
-    format="%(levelname)s - %(funcName)s() - %(message)s", level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+boto3.set_stream_logger()
+boto3.set_stream_logger("botocore")
+logger = Logger(service="wordle")
 
 if os.getenv("DYNAMODB_GAME_TABLE") is not None:
     WORDLE_DYNAMODB_TABLE: str = os.getenv("DYNAMODB_GAME_TABLE")

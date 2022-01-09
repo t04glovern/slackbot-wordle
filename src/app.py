@@ -1,9 +1,13 @@
 import time
 
+from aws_lambda_powertools import Logger
+from aws_lambda_powertools.utilities.typing import LambdaContext
 from slack_bolt import App
 from slack_bolt.adapter.aws_lambda import SlackRequestHandler
 
 from wordle import WordleBotManager
+
+logger = Logger(service="wordle")
 
 # process_before_response must be True when running on FaaS
 app = App(process_before_response=True)
@@ -30,7 +34,8 @@ def run_long_process(respond, body):
     respond(bot.letters())
 
 
-def handler(event, context):
+@logger.inject_lambda_context
+def handler(event, context: LambdaContext):
     slack_handler = SlackRequestHandler(app=app)
     return slack_handler.handle(event, context)
 
