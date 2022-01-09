@@ -6,8 +6,6 @@ from aws_lambda_powertools import Logger
 from boto3.dynamodb.conditions import Key
 from botocore.exceptions import ClientError
 
-from wordle import WordleGame
-
 boto3.set_stream_logger()
 boto3.set_stream_logger("botocore")
 logger = Logger(service="wordle")
@@ -33,19 +31,8 @@ dynamodb = boto3.resource("dynamodb")
 def get_wordle_game(user_id):
     table = dynamodb.Table(WORDLE_DYNAMODB_TABLE)
     response = table.query(KeyConditionExpression=Key("user_id").eq(user_id))
-    logger.info(response)
     if len(response["Items"]) > 0:
-        item = response["Items"][0]
-        game = WordleGame(
-            game_started=item["game_started"],
-            user=item["user"],
-            word=item["word"],
-            turns=item["turns"],
-            history=item["history"],
-            letters_open=item["letters"]["open"],
-            letters_good=item["letters"]["good"]
-        )
-        return game
+        return response["Items"][0]
     else:
         return None
 
@@ -54,7 +41,6 @@ def put_wordle_game(user_id, game):
     table = dynamodb.Table(WORDLE_DYNAMODB_TABLE)
     try:
         response = table.put_item(Item={"user_id": user_id, "game": game.to_json()})
-        logger.info(response)
         return response
     except ClientError as e:
         logger.error(e.response["Error"]["Message"])
