@@ -18,12 +18,13 @@ def respond_to_slack_within_3_seconds(body, ack):
         ['start']
         ['guess', '<WORD>']
         ['end]
+        ['letters]
     """
     text = body.get("text")
     options = text.split()
     logger.info("respond_to_slack_within_3_seconds request options: {}".format(options))
     if options is None or len(options) == 0:
-        ack("Usage: `/wordle start` | `/wordle guess <WORD>` | `/wordle end`")
+        ack("Usage: `/wordle start` | `/wordle guess <WORD>` | `/wordle letters` | `/wordle end`")
     else:
         if options[0] == "start":
             bot = WordleBotManager(ctx=body)
@@ -41,14 +42,18 @@ def respond_to_slack_within_3_seconds(body, ack):
             bot = WordleBotManager(ctx=body)
             bot.end()
             ack(f"Game reset for {body['user_name']}!, use `/wordle start` to play again")
+        elif options[0] == "letters": # Check if we should return letters
+            bot = WordleBotManager(ctx=body)
+            ack(f"{bot.letters()}")
         else:
-            ack("No valid option selected... Usage: `/wordle start` | `/wordle guess <WORD>` | `/wordle end`")
+            ack("No valid option selected... Usage: `/wordle start` | `/wordle guess <WORD>` | `/wordle letters` | `/wordle end`")
 
 def handle_game(respond, body):
     """[options]
         ['start']
         ['guess', '<WORD>']
         ['end']
+        ['letters]
     """
     text = body.get("text")
     options = text.split()

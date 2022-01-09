@@ -2,6 +2,13 @@
 
 ![Slackbot Example](img/sample.png)
 
+## Usage
+
+* `/wordle start` - start a game
+* `/wordle guess <word>` - guess a 5 letter word
+* `/wordle end` - terminate current active game (incase you want a new gameboard)
+* `/wordle letters` - returns letters still available if a list helps you.
+
 ## Manual Deployment
 
 ```bash
