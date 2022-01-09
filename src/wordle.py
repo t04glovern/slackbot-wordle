@@ -112,21 +112,27 @@ class WordleBot:
             self.games["user_id"] = game
 
     def checkGame(self, user_id: str):
+        logger.debug("checkGame for {}".format(user_id))
         return user_id in self.games
 
     def deleteGame(self, user_id: str):
+        logger.debug("deleteGame for {}".format(user_id))
         if self.checkGame(user_id):
             del self.games[user_id]
             return 0
         return 1
 
     def addGame(self, user_id: str, game: WordleGame):
+        logger.debug("addGame for {}".format(user_id))
         if self.checkGame(user_id):
+            logger.debug("addGame game already exists for {}".format(user_id))
             return False
         else:
+            logger.debug("addGame game didn't exists for {}. Adding one".format(user_id))
             self.games[user_id] = game
 
     def saveGame(self, user_id: str):
+        logger.debug("saveGame for {}".format(user_id))
         game = self.getGame(user_id)
         if game:
             put_wordle_game(user_id=user_id, game=game)
@@ -134,9 +140,11 @@ class WordleBot:
         return 0
 
     def getGame(self, user_id: str):
+        logger.debug("getGame for {}".format(user_id))
         if self.checkGame(user_id):
             return self.games[user_id]
         else:
+            logger.debug("getGame: None found")
             return None
 
 
