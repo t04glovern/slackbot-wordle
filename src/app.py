@@ -30,7 +30,7 @@ def respond_to_slack_within_3_seconds(body, ack):
             bot.start()
             ack(f"Welcome {body['user_name']} to Wordle!, use `/wordle guess <WORD>`\n{bot.review()}\n{bot.letters()}")
         elif options[0] == "guess": # Check if we have a 'guess'
-            if options[1]: # Check a word was provided
+            if len(options) > 1: # Check a word was provided
                 guess = options[1]
                 bot = WordleBotManager(ctx=body)
                 bot.start()

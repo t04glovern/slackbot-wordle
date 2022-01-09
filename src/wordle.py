@@ -98,19 +98,22 @@ class WordleBot:
     def __init__(self, user_id: str):
         self.games = dict()
         item = get_wordle_game(user_id)
-        game_item = item["game"]
-        if game_item:
-            logger.info("WordleBot.__init__ game_item found for {} with value: {}".format(user_id, game_item))
-            game = WordleGame(
-                game_started=game_item["game_started"],
-                user=game_item["user"],
-                word=game_item["word"],
-                turns=game_item["turns"],
-                history=game_item["history"],
-                letters_open=game_item["letters"]["open"],
-                letters_good=game_item["letters"]["good"]
-            )
-            self.games[user_id] = game
+        if item:
+            game_item = item["game"]
+            if game_item:
+                logger.info("WordleBot.__init__ game_item found for {} with value: {}".format(user_id, game_item))
+                game = WordleGame(
+                    game_started=game_item["game_started"],
+                    user=game_item["user"],
+                    word=game_item["word"],
+                    turns=game_item["turns"],
+                    history=game_item["history"],
+                    letters_open=game_item["letters"]["open"],
+                    letters_good=game_item["letters"]["good"]
+                )
+                self.games[user_id] = game
+            else:
+                logger.info("WordleBot.__init__ game_item NOT found for {}".format(user_id))
         else:
             logger.info("WordleBot.__init__ game_item NOT found for {}".format(user_id))
 
