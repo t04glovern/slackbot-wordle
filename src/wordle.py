@@ -48,7 +48,7 @@ class WordleGame:
         letters_open = self.letters["open"]
         letters_good = self.letters["good"]
 
-        logger.info("process_guess letters.open: {} letters_good: {}".format(letters_open, letters_good))
+        logger.info("process_guess letters.open: {} typed {} letters_good: {} typed {}".format(letters_open, letters_good, type(letters_open), type(letters_good)))
 
         # Make a pretty history first
         for i in range(5):
