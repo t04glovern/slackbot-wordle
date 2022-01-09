@@ -177,7 +177,7 @@ class WordleBotManager:
         word = random.choice(WORDS)
 
         user = self.ctx["user_id"]
-        self.bot.addGame(uid, WordleGame(user, word))
+        self.bot.addGame(uid, WordleGame(user=user, word=word))
         self.bot.saveGame(uid)
 
     def review(self):
