@@ -35,6 +35,8 @@ def respond_to_slack_within_3_seconds(body, ack):
                 bot = WordleBotManager(ctx=body)
                 bot.start()
                 ack(bot.guess(guess=guess))
+            else:
+                ack(f"<WORD> required. Please use `/wordle guess <WORD>`\n{bot.review()}\n{bot.letters()}")
         elif options[0] == "end": # Check if we should end the game
             bot = WordleBotManager(ctx=body)
             bot.end()
