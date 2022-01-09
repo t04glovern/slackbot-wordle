@@ -81,6 +81,23 @@ Resources:
               - dynamodb:Query
             Resource: !GetAtt WordleGameStore.Arn
 
+  ImageGenerateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: image.generate
+      Runtime: python3.9
+      FunctionName: !Sub ${FunctionName}-image-${StageName}
+      Layers:
+        - arn:aws:lambda:ap-east-1:347599033421:layer:wkhtmltopdf-0_12_6:1
+      Events:
+        SlackEvent:
+          Type: Api
+          Properties:
+            Path: /image
+            Method: get
+            RestApiId: !Ref SlackbotApi
+
   WordleGameStore:
     Type: AWS::DynamoDB::Table
     Properties:

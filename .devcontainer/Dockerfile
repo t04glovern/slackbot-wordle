@@ -42,5 +42,9 @@ RUN curl https://s3.ap-southeast-1.amazonaws.com/dynamodb-local-singapore/dynamo
         && unzip dynamodb_local_latest.zip -d /opt/dynamodb_local \
         && rm dynamodb_local_latest.zip
 
+# Dev Requirements (https://pypi.org/project/htmlwebshot/)
+RUN apt-get update \
+        && apt-get install -y wkhtmltopdf
+
 # Swap to user space
 USER $USERNAME

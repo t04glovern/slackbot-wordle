@@ -1,4 +1,3 @@
-import logging
 import os
 
 import boto3
@@ -55,6 +54,7 @@ def delete_wordle_game(user_id):
     except ClientError as e:
         logger.error(e.response["Error"]["Message"])
         return None
+
 
 with open("words.txt", "r") as f:
     WORDLEBANK = [word.strip().upper() for word in f.readlines()]
