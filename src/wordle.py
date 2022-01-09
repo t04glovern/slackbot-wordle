@@ -97,7 +97,8 @@ class WordleGame:
 class WordleBot:
     def __init__(self, user_id: str):
         self.games = dict()
-        game_item = get_wordle_game(user_id)
+        item = get_wordle_game(user_id)
+        game_item = item["game"]
         if game_item:
             game = WordleGame(
                 game_started=game_item["game_started"],
