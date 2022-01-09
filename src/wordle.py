@@ -52,7 +52,7 @@ class WordleGame:
 
         # Make a pretty history first
         for i in range(5):
-            out_string += f":regional_indicator_{guess[i].lower()}: "
+            out_string += f":alphabet-white-{guess[i].lower()}: "
         out_string += "\n"
 
         for i in range(5):
