@@ -38,7 +38,7 @@ def get_wordle_game(user_id):
 def put_wordle_game(user_id, game):
     table = dynamodb.Table(WORDLE_DYNAMODB_TABLE)
     try:
-        response = table.put_item(Item={"user_id": game.user, "game": game})
+        response = table.put_item(Item={"user_id": user_id, "game": game.to_json()})
         logger.info(response)
         return response
     except ClientError as e:

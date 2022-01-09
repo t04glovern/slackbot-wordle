@@ -25,6 +25,19 @@ class WordleGame:
         }
         print(f"Game started by {user} with word {word}.")
 
+    def to_json(self):
+        return {
+            "game_started": self.game_started,
+            "user": self.user,
+            "word": self.word,
+            "turns": self.turns,
+            "history": self.history,
+            "letters": {
+                "open": self.letters["open"],
+                "good": self.letters["good"]
+            }
+        }
+
     def process_guess(self, guess):
         out_string = ""
         letters_open = self.letters["open"]
