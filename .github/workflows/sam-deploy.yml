@@ -32,9 +32,6 @@ jobs:
 
         curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -r '.value' > $AWS_WEB_IDENTITY_TOKEN_FILE
 
-    - name: Install layer dependencies
-      run: sudo apt-get install -y make wget
-
     - name: Build SAM project
       run: |
         sam build --use-container
