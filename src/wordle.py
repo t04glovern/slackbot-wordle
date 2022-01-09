@@ -96,11 +96,10 @@ class WordleGame:
 
 class WordleBot:
     def __init__(self, user_id: str):
+        self.games = dict()
         game = get_wordle_game(user_id)
         if game:
             self.games["user_id"] = game
-        else:
-            self.games = dict()
 
     def checkGame(self, user_id: str):
         return user_id in self.games
