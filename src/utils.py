@@ -47,5 +47,14 @@ def put_wordle_game(user_id, game):
         return None
 
 
+def delete_wordle_game(user_id):
+    table = dynamodb.Table(WORDLE_DYNAMODB_TABLE)
+    try:
+        response = table.delete_item(Key={"user_id": user_id})
+        return response
+    except ClientError as e:
+        logger.error(e.response["Error"]["Message"])
+        return None
+
 with open("words.txt", "r") as f:
     WORDLEBANK = [word.strip().upper() for word in f.readlines()]

@@ -1,7 +1,7 @@
 import logging
 import random
 
-from utils import WORDLEBANK, get_wordle_game, put_wordle_game
+from utils import WORDLEBANK, delete_wordle_game, get_wordle_game, put_wordle_game
 
 WORDS = WORDLEBANK
 WORDS_SET = set(WORDS)
@@ -121,6 +121,7 @@ class WordleBot:
     def deleteGame(self, user_id: str):
         logger.info("deleteGame for {}".format(user_id))
         if self.checkGame(user_id):
+            delete_wordle_game(user_id)
             del self.games[user_id]
             return 0
         return 1
@@ -172,6 +173,7 @@ class WordleBotManager:
 
         user = self.ctx["user_id"]
         self.bot.addGame(uid, WordleGame(user, word))
+        self.bot.saveGame(uid)
 
     def review(self):
         """Review your previous guesses."""

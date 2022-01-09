@@ -16,22 +16,28 @@ app = App(process_before_response=True)
 def respond_to_slack_within_3_seconds(body, ack):
     text = body.get("text")
     if text is None or len(text) == 0:
-        ack("Usage: /wordle (description here)")
+        ack("Usage: /wordle start | /wordle guess <WORD>")
     else:
-        ack(f"Welcome {body['user_name']} to Wordle, let's start a new game!")
+        if body["text"] is "start":
+            ack(f"Welcome {body['user_name']} to Wordle!")
+            bot = WordleBotManager(ctx=body)
+            bot.start()
 
 
-def run_long_process(respond, body):
-    time.sleep(5)  # longer than 3 seconds
+def handle_game(respond, body):
+    """[options]
+        ['start']
+        ['guess', '<WORD>']
+    """
+    options = body["text"].split()
 
-    ## TODO Wordle Logic
-    bot = WordleBotManager(ctx=body)
-    bot.start()
-    respond(bot.letters())
-    respond(bot.guess(guess="AROSE"))
-    respond(bot.letters())
-    respond(bot.guess(guess="TAKEN"))
-    respond(bot.letters())
+    if options[0] is "guess": # Check if we have a 'guess'
+        if options[1]: # Check a word was provided
+            guess = options[1]
+            bot = WordleBotManager(ctx=body)
+            bot.start()
+            respond(bot.guess(guess=guess))
+            respond(bot.letters())
 
 
 @logger.inject_lambda_context
@@ -42,5 +48,5 @@ def handler(event, context: LambdaContext):
 
 app.command("/wordle")(
     ack=respond_to_slack_within_3_seconds,  # responsible for calling `ack()`
-    lazy=[run_long_process],  # unable to call `ack()` / can have multiple functions
+    lazy=[handle_game],  # unable to call `ack()` / can have multiple functions
 )
