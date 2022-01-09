@@ -89,7 +89,7 @@ Resources:
       Runtime: python3.9
       FunctionName: !Sub ${FunctionName}-image-${StageName}
       Layers:
-        - arn:aws:lambda:ap-east-1:347599033421:layer:wkhtmltopdf-0_12_6:1
+        - arn:aws:lambda:us-east-1:347599033421:layer:wkhtmltopdf-0_12_6:1
       Events:
         SlackEvent:
           Type: Api
