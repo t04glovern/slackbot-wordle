@@ -45,13 +45,13 @@ def handle_game(respond, body):
     options = text.split()
     logger.info("handle_game request options: {}".format(options))
 
-    if options[0] is "guess": # Check if we have a 'guess'
-        if options[1]: # Check a word was provided
-            guess = options[1]
-            bot = WordleBotManager(ctx=body)
-            bot.start()
-            respond(bot.guess(guess=guess))
-            respond(bot.letters())
+    # if options[0] is "guess": # Check if we have a 'guess'
+    #     if options[1]: # Check a word was provided
+    #         guess = options[1]
+    #         bot = WordleBotManager(ctx=body)
+    #         bot.start()
+    #         respond(bot.guess(guess=guess))
+    #         respond(bot.letters())
 
 
 @logger.inject_lambda_context
@@ -62,5 +62,5 @@ def handler(event, context: LambdaContext):
 
 app.command("/wordle")(
     ack=respond_to_slack_within_3_seconds,  # responsible for calling `ack()`
-    # lazy=[handle_game],  # unable to call `ack()` / can have multiple functions
+    lazy=[handle_game],  # unable to call `ack()` / can have multiple functions
 )
