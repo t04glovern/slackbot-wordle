@@ -25,6 +25,8 @@ sam build
 sam deploy
 ```
 
+Follow the instructions in [SLACK.md](./SLACK.md) for details on how to install the bot in your workspace.
+
 ## Local Testing
 
 ### DynamoDB
