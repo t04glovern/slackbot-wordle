@@ -45,6 +45,14 @@ Resources:
                 Action:
                   - secretsmanager:ListSecrets
                 Resource: '*'
+        - PolicyName: lambda-layers
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - lambda:GetLayerVersion
+                Resource: '*'
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
         - arn:aws:iam::aws:policy/IAMFullAccess
