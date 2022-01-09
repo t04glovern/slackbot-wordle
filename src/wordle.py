@@ -48,6 +48,8 @@ class WordleGame:
         letters_open = self.letters["open"]
         letters_good = self.letters["good"]
 
+        logger.info("process_guess letters.open: {} letters_good: {}".format(letters_open, letters_good))
+
         # Make a pretty history first
         for i in range(5):
             out_string += f":regional_indicator_{guess[i].lower()}: "
