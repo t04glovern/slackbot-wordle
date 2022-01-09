@@ -48,8 +48,6 @@ class WordleGame:
         letters_open = self.letters["open"]
         letters_good = self.letters["good"]
 
-        logger.info("process_guess letters.open: {} typed {} letters_good: {} typed {}".format(letters_open, letters_good, type(letters_open), type(letters_good)))
-
         # Make a pretty history first
         for i in range(5):
             out_string += f":alphabet-white-{guess[i].lower()}: "
@@ -103,7 +101,11 @@ class WordleBot:
         if item:
             game_item = item["game"]
             if game_item:
-                logger.info("WordleBot.__init__ game_item found for {} with value: {}".format(user_id, game_item))
+                logger.info(
+                    "WordleBot.__init__ game_item found for {} with value: {}".format(
+                        user_id, game_item
+                    )
+                )
                 game = WordleGame(
                     game_started=game_item["game_started"],
                     user=game_item["user"],
@@ -111,11 +113,13 @@ class WordleBot:
                     turns=game_item["turns"],
                     history=game_item["history"],
                     letters_open=game_item["letters"]["open"],
-                    letters_good=game_item["letters"]["good"]
+                    letters_good=game_item["letters"]["good"],
                 )
                 self.games[user_id] = game
             else:
-                logger.info("WordleBot.__init__ game_item NOT found for {}".format(user_id))
+                logger.info(
+                    "WordleBot.__init__ game_item NOT found for {}".format(user_id)
+                )
         else:
             logger.info("WordleBot.__init__ game_item NOT found for {}".format(user_id))
 
