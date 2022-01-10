@@ -1,6 +1,7 @@
+import base64
 from string import Template
 
-from htmlwebshot import Config, WebShot
+from htmlwebshot import WebShot
 
 
 def generate(event, context):
@@ -96,15 +97,20 @@ def generate(event, context):
     </html>
     """
     )
-    filepath = "wordle.svg"
-    shot.create_pic(html=content.template, output=filepath)
-    with open(filepath, "r") as file:
-        image = file.read().replace("\n", "")
-    print(image)
+    htmlpath = "/tmp/wordle.html"
+    with open(htmlpath, "w") as htmlfile:
+        htmlfile.write(content.template)
+
+    pngpath = "/tmp/wordle.png"
+    imagefile = shot.create_pic(html=htmlpath, output=pngpath)
+    with open(imagefile, "rb") as file:
+        image = base64.b64encode(file.read()).decode('utf-8')
+
     return {
         "statusCode": 200,
         "body": image,
+        "isBase64Encoded": "true",
         "headers": {
-            "Content-Type": "image/svg+xml",
+            "Content-Type": "image/png",
         },
     }

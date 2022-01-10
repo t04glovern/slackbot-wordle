@@ -20,6 +20,8 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Ref StageName
+      BinaryMediaTypes:
+        - image~1png
       AccessLogSetting:
         DestinationArn: !GetAtt SlackbotLogGroup.Arn
         Format: >-
@@ -98,6 +100,7 @@ Resources:
       CodeUri: src/
       Handler: image.generate
       Runtime: python3.9
+      MemorySize: 512
       FunctionName: !Sub ${FunctionName}-image-${StageName}
       Layers:
         - !Ref ImageGenerateLayer
