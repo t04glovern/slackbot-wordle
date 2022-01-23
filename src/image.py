@@ -1,10 +1,14 @@
 import base64
 from string import Template
 
+from aws_lambda_powertools import Logger
+from aws_lambda_powertools.utilities.typing import LambdaContext
 from htmlwebshot import WebShot
 
+logger = Logger(service="image")
 
-def generate(event, context):
+@logger.inject_lambda_context
+def generate(event, context: LambdaContext):
     shot = WebShot()
     shot.size = (248, 236)
 

@@ -13,7 +13,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
         && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
         && chmod 0440 /etc/sudoers.d/$USERNAME
 
-RUN apt-get -qq update && apt-get install -qq -y git curl wget bash zip make
+RUN apt-get -qq update && apt-get install -qq -y git curl wget bash zip make nano
 
 ENV DOCKER_VERSION=20.10.9
 RUN curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz \
