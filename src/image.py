@@ -12,8 +12,7 @@ def generate(event, context: LambdaContext):
     shot = WebShot()
     shot.size = (248, 236)
 
-    content = Template(
-        """
+    content = Template("""
     <!DOCTYPE html>
     <html>
 
@@ -109,6 +108,7 @@ def generate(event, context: LambdaContext):
     imagefile = shot.create_pic(html=htmlpath, output=pngpath)
     with open(imagefile, "rb") as file:
         image = base64.b64encode(file.read()).decode('utf-8')
+        logger.info("Image: {}".format(image))
 
     return {
         "statusCode": 200,

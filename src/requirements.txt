@@ -1,4 +1,3 @@
 slack-bolt
 boto3
 aws-lambda-powertools
-htmlwebshot

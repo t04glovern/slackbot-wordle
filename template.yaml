@@ -21,7 +21,7 @@ Resources:
     Properties:
       StageName: !Ref StageName
       BinaryMediaTypes:
-        - image~1png
+        - '*~1*'
       AccessLogSetting:
         DestinationArn: !GetAtt SlackbotLogGroup.Arn
         Format: >-
@@ -107,6 +107,7 @@ Resources:
       Environment:
         Variables:
           FONTCONFIG_PATH: /opt/fonts
+          LOG_LEVEL: INFO
       Events:
         SlackEvent:
           Type: Api
