@@ -44,14 +44,14 @@ class WordleGame:
         }
 
     def process_guess(self, guess):
-        out_string = ""
+        out_string = "`"
         letters_open = self.letters["open"]
         letters_good = self.letters["good"]
 
         # Make a pretty history first
         for i in range(5):
-            out_string += f":alphabet-white-{guess[i].lower()}: "
-        out_string += "\n"
+            out_string += guess[i].upper()
+        out_string += "`: "
 
         for i in range(5):
             if guess[i] in letters_open:

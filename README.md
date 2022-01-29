@@ -49,6 +49,10 @@ OIDC_ROLE_AWS_REGION
 OIDC_ROLE_AWS_ROLE_TO_ASSUME
 ```
 
+## Architecture
+
+![Architecture](img/architecture.png)
+
 ## TODO
 
 * Convert flow to use [Surface modals if possible](https://api.slack.com/surfaces/modals/using) - will need to confirm this is possible with Slack Bolt
